@@ -24,6 +24,6 @@ public interface IParkStandardService {
      * @param carNo    车牌号
      * @return
      */
-    BigDecimal feeFixedHours(Integer marketId, String in, Integer parkTime);
+    BigDecimal fee(Integer marketId, String in, Integer parkTime);
 
 }

@@ -6,6 +6,7 @@ import cn.com.hopson.hopsonone.parking.rate.mapper.RuleDetailMapper;
 import cn.com.hopson.hopsonone.parking.rate.mapper.RuleMapper;
 import cn.com.hopson.hopsonone.parking.rate.service.IParkStandardService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.sun.jmx.snmp.Timestamp;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -65,11 +71,71 @@ class ParkingRateApplicationTests {
 	}
 
 	@Test
-	void test() {
-		//BigDecimal fee = parkStandardService.feeFixedHours(11, "2020-01-01 01:00:00", 15);
-		BigDecimal fee = parkStandardService.feeOutTime(11, "2020-01-01 01:00:00", "2020-01-01 11:00:00");
-		System.out.println(fee);
+	public void demo2() {
+		DateTime inDateTime = DateTime.parse("2020-10-09 00:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+		DateTime inDateTime1 = DateTime.parse("2020-10-08 23:59:59", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+		System.out.println(inDateTime.getMillis());
+		System.out.println(inDateTime1.getMillis());
+		System.out.println(inDateTime1.getMillis() - inDateTime.getMillis());
+	}
 
+	@Test
+	void test() {
+		BigDecimal fee = parkStandardService.fee(11, "2020-01-01 21:00:00", 15);
+		System.out.println(fee);
+//
+//		//DateToStringBeginOrEnd(new Date(), false);
+////		DateTime startOrEnd = getStartOrEnd(DateTime.now(), 22, 7, true);
+////		System.out.println(startOrEnd);
+
+//		int[] a = {20,2};
+//		int[] b = {3,12};
+//		int[] c = {13,16};
+//		int[] d = {17,19};
+//		int[] a1 = {17,19};
+//		int[] a2 = {17,19};
+//
+//		List<int[]> list = new CopyOnWriteArrayList<>();
+//		list.add(a);
+//		list.add(b);
+//		list.add(c);
+//		list.add(d);
+//
+//		//int num = 21 ;
+//
+////		for (int[] num : list) {
+////			if(num[0] > num[1]) {
+////				System.out.println(num[0] + " " + num[1]);
+////			}
+////		}
+//
+//		list.forEach(System.out::println);
+	}
+
+
+
+	public String DateToStringBeginOrEnd(Date date,Boolean flag) {
+		String time = null;
+		SimpleDateFormat dateformat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Calendar calendar1 = Calendar.getInstance();
+		//获取某一天的0点0分0秒 或者 23点59分59秒
+		if (flag == true) {
+			calendar1.setTime(date);
+			calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH),
+					0, 0, 0);
+			Date beginOfDate = calendar1.getTime();
+			time = dateformat1.format(beginOfDate);
+			System.out.println(time);
+		}else{
+			Calendar calendar2 = Calendar.getInstance();
+			calendar2.setTime(date);
+			calendar1.set(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH),
+					23, 59, 59);
+			Date endOfDate = calendar1.getTime();
+			time = dateformat1.format(endOfDate);
+			System.out.println(time);
+		}
+		return time;
 	}
 
 }
